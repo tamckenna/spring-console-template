@@ -1,0 +1,18 @@
+# Ignore Project Specific Directories
+bin/
+build/
+.clover/
+target/
+.gradle/
+.idea/
+.settings/
+.vscode/
+
+# Ignore Project Specific Files
+.classpath
+.project
+*.log
+
+# Ignore OS Files & Misc
+.DS_Store
+*.bak

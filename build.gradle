@@ -1,0 +1,55 @@
+// Gradle Plugins DSL Standard
+plugins {
+    id 'java'
+    //id 'jacoco'
+    id 'eclipse'
+    id 'idea'
+    id 'pmd'
+    id 'org.springframework.boot' version '2.2.1.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id "com.github.spotbugs" version "3.0.0"
+    id "com.bmuschko.clover" version "2.2.4"
+}
+
+// Gradle Project Configurations
+configurations { developmentOnly; runtimeClasspath { extendsFrom developmentOnly } }
+group = projectGroup                                       
+version = projectVersion
+sourceCompatibility = projectSourceCompatibility
+targetCompatibility = projectTargetCompatibility
+bootJar { archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}" }
+repositories { mavenCentral() ; maven { url 'http://artifactory.mem-aws.com/artifactory/libs-release-local' } }
+
+// Application dependencies
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'com.oracle:ojdbc7:12.1.0.2'
+    implementation 'com.microsoft.sqlserver:mssql-jdbc:7.4.1.jre8'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'junit:junit:4.12'
+    clover 'org.openclover:clover:4.4.1'
+}
+
+// Code Analysis/Report Configurations
+clover { report { html = true }; testIncludes = ['**/*Test.java', '**/*Tests.java'];  targetPercentage = "${codeCoverageRequiredPercentage}%"  }
+spotbugs { ignoreFailures = true; spotbugsTest.enabled = false }
+tasks.withType(Pmd){ reports{ xml.enabled=true; html.enabled=true } }
+pmd { ignoreFailures = true; pmdTest.enabled=false }
+//jacoco { toolVersion = "0.8.5" }
+//jacocoTestReport { reports { xml.enabled true; csv.enabled true } }
+
+// Catch all Gradle task to run a complete clean build
+task cleanBuild {
+    dependsOn 'clean'
+    dependsOn 'test'
+    dependsOn 'check'
+    dependsOn 'cloverGenerateReport'
+    dependsOn 'bootJar'
+
+    tasks.findByName('test').mustRunAfter('clean')
+    tasks.findByName('check').mustRunAfter('test')
+    tasks.findByName('cloverGenerateReport').mustRunAfter('check')
+    tasks.findByName('bootJar').mustRunAfter('cloverGenerateReport')
+}
