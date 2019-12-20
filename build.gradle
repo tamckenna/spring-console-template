@@ -18,15 +18,15 @@ version = projectVersion
 sourceCompatibility = projectSourceCompatibility
 targetCompatibility = projectTargetCompatibility
 bootJar { archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}" }
-repositories { mavenCentral() ; maven { url 'http://artifactory.mem-aws.com/artifactory/libs-release-local' } }
+repositories { mavenCentral() }
 
 // Application dependencies
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-batch'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'com.oracle:ojdbc7:12.1.0.2'
-    implementation 'com.microsoft.sqlserver:mssql-jdbc:7.4.1.jre8'
+    //implementation 'com.oracle:ojdbc7:12.1.0.2'
+    //implementation 'com.microsoft.sqlserver:mssql-jdbc:7.4.1.jre8'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'junit:junit:4.12'
     clover 'org.openclover:clover:4.4.1'
