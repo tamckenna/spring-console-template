@@ -23,4 +23,14 @@ public class Application implements CommandLineRunner {
 
     protected String getHelloWorld() { return "Hello world!"; }
 
+    public void terrribleMethodExample(String input){
+        System.out.println("Printing: " + input);
+
+        int Valint1 = 0;
+        int val_int2 = 10;
+
+        int outVal = val_int2 / Valint1;
+
+    }
+
 }
